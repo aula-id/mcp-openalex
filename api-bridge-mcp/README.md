@@ -1,6 +1,6 @@
 # OpenAlex MCP Server
 
-An MCP server that connects AI assistants to OpenAlex — the world's largest open catalog of scholarly research. Search 250M+ papers, 90M+ authors, and 109K+ institutions directly from your AI workflow.
+An MCP server that connects AI assistants to OpenAlex — the world's largest open catalog of scholarly research. Search 300M+ papers, 90M+ authors, and 109K+ institutions directly from your AI workflow.
 
 ## What is this?
 
@@ -23,8 +23,8 @@ This is a [Model Context Protocol](https://modelcontextprotocol.io/) server that
 ### 1. Clone or copy
 
 ```bash
-git clone <your-repo-url> openalex-mcp
-cd openalex-mcp
+git clone git@github.com:aula-id/mcp-openalex.git
+cd mcp-openalex/api-bridge-mcp
 npm install
 ```
 
@@ -50,7 +50,7 @@ Add to your MCP client config:
   "mcpServers": {
     "openalex": {
       "command": "node",
-      "args": ["/absolute/path/to/openalex-mcp/server.js"],
+      "args": ["/path/to/mcp-openalex/api-bridge-mcp/server.js"],
       "env": {
         "OPENALEX_API_KEY": "your-key-here",
         "OPENALEX_MAILTO": "your@email.com"
@@ -293,10 +293,13 @@ The tools auto-detect identifier formats — no need to specify the type:
 ## Architecture
 
 ```
-openalex-mcp/
-├── package.json       # Dependencies
-├── server.js          # MCP server entry — tool definitions and registration
-└── openalex.js        # OpenAlex HTTP client, ID resolver, filter builder, response trimmers
+mcp-openalex/
+├── api-bridge-mcp/
+│   ├── package.json       # Dependencies
+│   ├── server.js          # MCP server entry — tool definitions and registration
+│   ├── openalex.js        # OpenAlex HTTP client, ID resolver, filter builder, response trimmers
+│   └── README.md          # Documentation
+└── .gitignore
 ```
 
 - **`openalex.js`** handles all OpenAlex API communication, ID auto-detection, filter string construction, and response trimming
