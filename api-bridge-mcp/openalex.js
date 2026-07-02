@@ -43,6 +43,25 @@ export function getConfig() {
   return { ...config };
 }
 
+// ── DOI → BibTeX via doi.org content negotiation ─────────────────
+export async function doiToBibtex(doi) {
+  const raw = doi.trim();
+  // Strip URL prefix if present
+  const bare = raw.replace(/^https?:\/\/doi\.org\//i, "").replace(/^doi:/i, "");
+  if (!/^10\.\d{4,}/.test(bare)) {
+    throw new Error(`Invalid DOI: ${bare}`);
+  }
+  const res = await fetch(`https://doi.org/${bare}`, {
+    headers: { Accept: "application/x-bibtex" },
+    redirect: "follow",
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`doi.org ${res.status} for ${bare}: ${body.slice(0, 300)}`);
+  }
+  return res.text();
+}
+
 // ── Filter builder ──────────────────────────────────────────────────
 // Converts a flat JS object into OpenAlex filter query string.
 // Handles shorthand keys and preserves raw filter values.
